@@ -1,4 +1,3 @@
-"use server"
 import Table from "@/components/table/Table";
 import prisma from "@/lib/db";
 import "@/app/style/style.scss";
