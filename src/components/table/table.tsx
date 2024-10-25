@@ -1,7 +1,7 @@
 "use client"
 import { useState, useRef, useEffect} from "react";
 import Form from "../form/Form";
-import { delete_item } from "@/actions/actions";
+import { delete_item } from "../../actions/actions";
 import Swal from "sweetalert2";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";

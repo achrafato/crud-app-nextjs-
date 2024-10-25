@@ -1,5 +1,5 @@
-import Table from "@/components/table/Table";
-import prisma from "@/lib/db";
+import Table from "../../components/table/Table";
+import prisma from "../../lib/db";
 
 export default async function Home()
 {
