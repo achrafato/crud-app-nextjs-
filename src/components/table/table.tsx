@@ -41,7 +41,7 @@ const Table = ({inventoryData}: {inventoryData : inventoryItem[]}) => {
         supplier: '',
         dateUpdated:new Date(),
     };
-    const sectionRef = useRef<HTMLDivElement>(null);
+    const sectionRef = useRef<HTMLFormElement>(null);
 
     const scrollToSection = () => {
         if (form_state)
@@ -55,16 +55,16 @@ const Table = ({inventoryData}: {inventoryData : inventoryItem[]}) => {
 
     const [formData, setFormData] = useState(initialFormData);
     const [current_fun, setCurrent_fun] = useState(0);
-        const [form_state, setFromState] = useState(false);
+    const [form_state, setFromState] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
-    const [viewMode, setViewMode] = useState('Card'); // 'table' or 'card'
+    const [viewMode, setViewMode] = useState('table'); // 'table' or 'card'
     const pageSize = 8;
 
     useEffect(()=>
     {
         scrollToSection();
-    }, [form_state]);
+    }, [form_state, formData]);
     
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -116,6 +116,12 @@ const Table = ({inventoryData}: {inventoryData : inventoryItem[]}) => {
         })
     }
 
+	const Add_item = ()=>{
+		setCurrent_fun(1);
+		setFormData(initialFormData);
+		setFromState(()=> !form_state)
+	}
+
     const Handle_delete = (id:number)=> {
         Swal.fire({
             title: "Are you sure?",
@@ -139,8 +145,14 @@ const Table = ({inventoryData}: {inventoryData : inventoryItem[]}) => {
     return (
         <div className="container con-table">
             {
-                form_state ? <Form setFromState={setFromState} formData={formData} setFormData={setFormData} current_fun={current_fun} sectionRef={sectionRef}/> : ""
+                form_state ? <Form 
+                setFromState={setFromState}
+                formData={formData}
+                setFormData={setFormData}
+                current_fun={current_fun}
+                sectionRef={sectionRef}/> : ""
             }
+
             <div className="control-section">
                 <div className="view-toggle right-content">
                     <button onClick={toggleViewMode}>
@@ -149,7 +161,7 @@ const Table = ({inventoryData}: {inventoryData : inventoryItem[]}) => {
                 </div>
 
                 <div className="view-toggle center-content">
-                    <button onClick={()=>{setCurrent_fun(1); setFormData(initialFormData); setFromState(true)}}>
+                    <button onClick={Add_item}>
                     Adding new Item
                     </button>
                 </div>
@@ -163,116 +175,129 @@ const Table = ({inventoryData}: {inventoryData : inventoryItem[]}) => {
                 />
             </div>
 
-            {/* { */}
-                {/* // viewMode == "table" ? */}
-                <table className={`striped-table ${viewMode != "table" ? "hide-part" : ""}`}>
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Item Name</th>
-                            <th>Category</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Supplier</th>
-                            <th>Latest Update</th>
-                            <th colSpan={2} className="text-center">
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                        visible_Items.length > 0 ? (
-                        visible_Items.map((item:Item, i:number) => (
-                            <tr key={item.id}>
-                                <td>{startIndex + i + 1}</td>
-                                <td>{item.itemName}</td>
-                                <td>{item.category}</td>
-                                <td>{item.quantity}</td>
-                                <td>{formatter.format(item.price)}</td>
-                                <td>{item.supplier} </td>
-                        
-                                <td>{new Date(item.dateUpdated).toLocaleDateString()} </td>
-                                <td className="text-right">
-                                    <button
-                                    onClick={() => handleEdit(item)}
-                                    className="button muted-button"
-                                    >
-                                    <CiEdit/>
-                                    </button>
-                                </td>
-                                <td className="text-left">
-                                    <button
-                                    onClick={() => {Handle_delete(item.id)}}
-                                    className="button muted-button"
-                                    >
-                                    <MdDelete/>
-                                    </button>
-                                </td>
-                            </tr>
-                        ))
-                        ) : (
-                        <tr>
-                            <td colSpan={8}>No Item</td>
-                        </tr>
-                        )
-                        }
-                    </tbody>
-                </table>
-                {/* // : */}
-                <div className={`grid-container ${viewMode == "table" ? "hide-part" : ""}`}>
+			<table className={`striped-table ${viewMode != "table" ? "hide-part" : ""}`}>
+				<thead>
+					<tr>
+						<th>No.</th>
+						<th>Item Name</th>
+						<th>Category</th>
+						<th>Quantity</th>
+						<th>Price</th>
+						<th>Supplier</th>
+						<th>Latest Update</th>
+						<th colSpan={2} className="text-center">
+							Actions
+						</th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					{
+							
+					visible_Items.length > 0 ? (
+					visible_Items.map((item:Item, i:number) => (
+						<tr key={item.id}>
+							<td>{startIndex + i + 1}</td>
+							<td>{item.itemName}</td>
+							<td>{item.category}</td>
+							<td>{item.quantity}</td>
+							<td>{formatter.format(item.price)}</td>
+							<td>{item.supplier} </td>
+					
+							<td>{new Date(item.dateUpdated).toLocaleDateString()} </td>
+							<td className="text-right">
+								<button
+								onClick={() => handleEdit(item)}
+								className="button"
+								>
+								<CiEdit/>
+								</button>
+							</td>
+							<td className="text-left">
+								<button
+								onClick={() => {Handle_delete(item.id)}}
+								className="button"
+								>
+								<MdDelete/>
+								</button>
+							</td>
+						</tr>
+					))
+					) : (
+						<tr>
+							<td colSpan={8} className="empty"> No Item</td>
+						</tr>
+						)
+					}
+				</tbody>
+
+			</table>
+
+
+            <div
+                className={`grid-container ${viewMode == "table" ? "hide-part" : ""}
+                ${(visible_Items.length > 0 && viewMode != "table") ? "" : (visible_Items.length == 0) ? "empty" : ""}`}>
+                
                 {visible_Items.length > 0 ? (
-                        visible_Items.map((item:Item, i:number) => (
-                            <div className="grid-item" key={i}>
-                                <div className="grid-back"></div>
-                                <div className="grid-info">
-                                    <div>Item Name:</div>
-                                    <div>{item.itemName}</div>
-                                </div>
-
-                                <div className="grid-info">
-                                    <div>Category:</div>
-                                    <div>{item.category}</div>
-                                </div>
-
-                                <div className="grid-info">
-                                    <div>Quantity:</div>
-                                    <div>{item.quantity}</div>
-                                </div>
-
-                                <div className="grid-info">
-                                    <div>Price:</div>
-                                    <div>{formatter.format(item.price)}</div>
-                                </div>
-
-                                <div className="grid-info">
-                                    <div>Supplier:</div>
-                                    <div>{item.supplier}</div>
-                                </div>
-
-                                <div className="control-bnts">
-                                        <button
-                                            onClick={() => handleEdit(item)}
-                                            className="button muted-button"
-                                            >
-                                            Edit
-                                            </button>
-                                        <button
-                                            onClick={() => {Handle_delete(item.id)}}
-                                            className="button muted-button"
-                                            >
-                                            Delete
-                                            </button>
-                                </div>
+                    visible_Items.map((item:Item, i:number) => (
+                        <div className="grid-item" key={i}>
+                            <div className="holes">
+                                <div className="hole"></div>
+                                <div className="hole"></div>
+                                <div className="hole"></div>
                             </div>
-                        ))
-                        ) : (
-                        <tr>
-                            <td colSpan={8}>No Item</td>
-                        </tr>
-                        )}
-                </div>
-            {/* } */}
+                            <div className="grid-info">
+                                <div>Item Name:</div>
+                                <div>{item.itemName}</div>
+                            </div>
+
+                            <div className="grid-info">
+                                <div>Category:</div>
+                                <div>{item.category}</div>
+                            </div>
+
+                            <div className="grid-info">
+                                <div>Quantity:</div>
+                                <div>{item.quantity}</div>
+                            </div>
+
+                            <div className="grid-info">
+                                <div>Price:</div>
+                                <div>{formatter.format(item.price)}</div>
+                            </div>
+
+                            <div className="grid-info">
+                                <div>Supplier:</div>
+                                <div>{item.supplier}</div>
+                            </div>
+
+                            <div className="control-bnts">
+                                    <button
+                                        onClick={() => handleEdit(item)}
+                                        className="button muted-button"
+                                        >
+                                        Edit
+                                        </button>
+                                    <button
+                                        onClick={() => {Handle_delete(item.id)}}
+                                        className="button muted-button"
+                                        >
+                                        Delete
+                                        </button>
+                            </div>
+                        </div>
+                    ))
+                    ) : (
+                        <div className="no-item">
+                            <div className="holes">
+                                <div className="hole"></div>
+                                <div className="hole"></div>
+                                <div className="hole"></div>
+                            </div>
+                            <p>No Item</p>
+                        </div>
+                    )}
+            </div>
             
             
             
@@ -286,7 +311,7 @@ const Table = ({inventoryData}: {inventoryData : inventoryItem[]}) => {
                 <span>
                 {currentPage} / {totalPages}
                 </span>
-                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                <button onClick={handleNextPage} disabled={currentPage === totalPages }>
                     <FaArrowRight/>
                 </button>
             </div>

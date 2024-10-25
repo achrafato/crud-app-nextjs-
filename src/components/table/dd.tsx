@@ -5,7 +5,18 @@ import { delete_item } from "@/actions/actions";
 import Swal from "sweetalert2";
 import "./table.scss"
 
-const Table = ({inventoryData}:any) => {
+interface inventoryItem{
+    id: number;
+    itemName: string;
+    category: string;
+    quantity: number;
+    price: number;
+    supplier: string;
+    dateAdded: Date;
+    dateUpdated: Date;
+};
+
+const Table = ({inventoryData}:{inventoryData:inventoryItem[]}) => {
     
     interface Item {
         id : number,
@@ -14,6 +25,7 @@ const Table = ({inventoryData}:any) => {
         quantity: number;
         price: number;
         supplier: string;
+        dateUpdated: Date;
     }
     const initialFormData = {
         id: 0,
@@ -44,7 +56,7 @@ const Table = ({inventoryData}:any) => {
     const endIndex = startIndex + pageSize;
     
     // Filter employees based on the search query
-    const filtered_items = inventoryData.filter((inv:any) =>
+    const filtered_items = inventoryData.filter((inv:Item) =>
     `${inv.itemName} ${inv.category}`.toLowerCase().includes(searchQuery.toLowerCase())
     );
     
@@ -69,7 +81,7 @@ const Table = ({inventoryData}:any) => {
         }
     };
 
-    const handleSearchChange = (e:any) =>
+    const handleSearchChange = (e:React.ChangeEvent<HTMLInputElement>) =>
     {
         setSearchQuery(e.target.value);
         setCurrentPage(1); // Reset to the first page when searching
@@ -92,7 +104,7 @@ const Table = ({inventoryData}:any) => {
         })
     }
 
-    const Handle_delete = (id:string)=> {
+    const Handle_delete = (id:Number)=> {
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -101,7 +113,7 @@ const Table = ({inventoryData}:any) => {
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!"
-            }).then((result:any) => {
+            }).then((result:Swal.FireResult) => {
             if (result.isConfirmed) {
                 delete_item(id)
                 Swal.fire({
@@ -159,7 +171,7 @@ const Table = ({inventoryData}:any) => {
                     </thead>
                     <tbody>
                         {visible_Items.length > 0 ? (
-                        visible_Items.map((item:any, i:any) => (
+                        visible_Items.map((item:Item, i:number) => (
                             <tr key={item.id}>
                                 <td>{startIndex + i + 1}</td>
                                 <td>{item.itemName}</td>
@@ -194,50 +206,50 @@ const Table = ({inventoryData}:any) => {
                         )}
                     </tbody>
                 </table>
-                :
-                <div className="grid-container">
-                    <div className="grid-item">
-                        <div className="grid-info">
-                            <h4>Item Name:</h4>
-                            <p>Sample Item</p>
-                        </div>
+                :""
+                // <div className="grid-container">
+                //     <div className="grid-item">
+                //         <div className="grid-info">
+                //             <h4>Item Name:</h4>
+                //             <p>Sample Item</p>
+                //         </div>
 
-                        <div className="grid-info">
-                            <h4>Category:</h4>
-                            <p>Electronics</p>
-                        </div>
+                //         <div className="grid-info">
+                //             <h4>Category:</h4>
+                //             <p>Electronics</p>
+                //         </div>
 
-                        <div className="grid-info">
-                            <h4>Quantity:</h4>
-                            <p>10</p>
-                        </div>
+                //         <div className="grid-info">
+                //             <h4>Quantity:</h4>
+                //             <p>10</p>
+                //         </div>
 
-                        <div className="grid-info">
-                            <h4>Price:</h4>
-                            <p>$999.99</p>
-                        </div>
+                //         <div className="grid-info">
+                //             <h4>Price:</h4>
+                //             <p>$999.99</p>
+                //         </div>
 
-                        <div className="grid-info">
-                            <h4>Supplier:</h4>
-                            <p>TechSupplier</p>
-                        </div>
+                //         <div className="grid-info">
+                //             <h4>Supplier:</h4>
+                //             <p>TechSupplier</p>
+                //         </div>
 
-                        <div className="control-bnts">
-                                <button
-                                    onClick={() => handleEdit(item)}
-                                    className="button muted-button"
-                                    >
-                                    Edit
-                                    </button>
-                                <button
-                                    onClick={() => {Handle_delete(item.id)}}
-                                    className="button muted-button"
-                                    >
-                                    Delete
-                                    </button>
-                        </div>
-                    </div>
-                </div>
+                //         <div className="control-bnts">
+                //                 <button
+                //                     onClick={() => handleEdit(item)}
+                //                     className="button muted-button"
+                //                     >
+                //                     Edit
+                //                     </button>
+                //                 <button
+                //                     onClick={() => {Handle_delete(item.id)}}
+                //                     className="button muted-button"
+                //                     >
+                //                     Delete
+                //                     </button>
+                //         </div>
+                //     </div>
+                // </div>
             }
             
             

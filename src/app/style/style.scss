@@ -1,0 +1,79 @@
+
+// from 400 to 700
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
+:root
+{
+	--color-black : #222;
+	--color-gray : #4a4a4a;
+	--color-light-g : #d4d8d9;
+	--color-light-l-g : #edededbf;
+	--color-light-b : #007bff;
+}
+
+body
+{
+	color:var(--color-black);
+	position: relative;
+}
+
+*{
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+a{
+	text-decoration: none;
+	color:inherit;
+}
+
+ul
+{
+	list-style: none;
+}
+
+input
+{
+	outline:none;
+}
+
+h1, h2, h3, h4{
+	font-family: "Lora", serif;
+	font-weight: 500;
+}
+.container{
+	margin: auto;
+}
+
+/*Small devices */
+@media (min-width: 576px){
+	.container{
+		width:540px;
+	}
+}
+
+	
+/*Medium  ---> tablets*/
+@media (min-width: 768px){
+	.container{
+		width:720px;
+	}
+}
+	
+/*DEsktops*/
+	
+@media (min-width: 992px){
+	.container{
+		width:960px;
+	}
+}
+	
+	/*Large Screens*/
+	
+	@media (min-width: 1200px){   /*    It mean minimum width value 12000 or above     */
+	.container{
+		width:1140px;
+	}
+}
