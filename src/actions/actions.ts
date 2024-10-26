@@ -1,6 +1,6 @@
 "use server"
 
-import prisma from "../lib/db"
+import prisma from "@/lib/db"
 import { revalidatePath } from "../../node_modules/next/cache";
 
 export async function new_item(data:FormData)

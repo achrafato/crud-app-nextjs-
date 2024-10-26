@@ -1,7 +1,7 @@
 "use client"
 import { useState, useRef, useEffect, useCallback} from "react";
-import Form from "components/form/Form";
-import { delete_item } from "actions/actions";
+import Form from "@/components/form/Form";
+import { delete_item } from "@/actions/actions";
 import Swal, {SweetAlertResult} from "sweetalert2";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
