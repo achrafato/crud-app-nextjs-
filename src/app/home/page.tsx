@@ -3,7 +3,7 @@ import prisma from "../../lib/db";
 
 export default async function Home()
 {
-    const data = await prisma.inventoryItem.findMany({
+    const data = await prisma.inventory.findMany({
     });
     return (
     

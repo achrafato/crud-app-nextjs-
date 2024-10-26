@@ -1,8 +1,8 @@
 "use client"
-import { useState, useRef, useEffect} from "react";
+import { useState, useRef, useEffect, useCallback} from "react";
 import Form from "../form/Form";
 import { delete_item } from "../../actions/actions";
-import Swal from "sweetalert2";
+import Swal, {SweetAlertResult} from "sweetalert2";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import { FaArrowLeft } from "react-icons/fa";
@@ -11,7 +11,7 @@ import { FaArrowRight } from "react-icons/fa";
 import "./table.scss"
 
 interface inventoryItem{
-    id: number;
+    id: string;
     itemName: string;
     category: string;
     quantity: number;
@@ -24,7 +24,7 @@ interface inventoryItem{
 const Table = ({inventoryData}: {inventoryData : inventoryItem[]}) => {
     
     interface Item {
-        id : number,
+        id : string,
         itemName: string;
         category: string;
         quantity: number;
@@ -33,7 +33,7 @@ const Table = ({inventoryData}: {inventoryData : inventoryItem[]}) => {
         dateUpdated: Date;
     }
     const initialFormData:Item = {
-        id: 0,
+        id: '',
         itemName: '',
         category: '',
         quantity: 0,
@@ -43,16 +43,7 @@ const Table = ({inventoryData}: {inventoryData : inventoryItem[]}) => {
     };
     const sectionRef = useRef<HTMLFormElement>(null);
 
-    const scrollToSection = () => {
-        if (form_state)
-        {
-            sectionRef?.current?.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
-        }
-    };
-
+    
     const [formData, setFormData] = useState(initialFormData);
     const [current_fun, setCurrent_fun] = useState(0);
     const [form_state, setFromState] = useState(false);
@@ -60,11 +51,20 @@ const Table = ({inventoryData}: {inventoryData : inventoryItem[]}) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [viewMode, setViewMode] = useState('table'); // 'table' or 'card'
     const pageSize = 8;
-
+    
+    const scrollToSection = useCallback(() => {
+        if (form_state)
+        {
+            sectionRef?.current?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+    }, [form_state]);
     useEffect(()=>
     {
         scrollToSection();
-    }, [form_state, formData]);
+    }, [form_state]);
     
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -122,7 +122,7 @@ const Table = ({inventoryData}: {inventoryData : inventoryItem[]}) => {
 		setFromState(()=> !form_state)
 	}
 
-    const Handle_delete = (id:number)=> {
+    const Handle_delete = (id:string)=> {
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -131,7 +131,7 @@ const Table = ({inventoryData}: {inventoryData : inventoryItem[]}) => {
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!"
-            }).then((result:Swal.FireResult) => {
+            }).then((result:SweetAlertResult) => {
             if (result.isConfirmed) {
                 delete_item(id)
                 Swal.fire({

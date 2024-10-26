@@ -1,20 +1,20 @@
 "use server"
 
-import prisma from "../lib/db"
+import prisma from "@/lib/db"
 import { revalidatePath } from "../../node_modules/next/cache";
 
-interface dd {
-	id: number;
-	itemName: string;
-	category: string;
-	quantity: number;
-	price: number;
-	supplier: string;
-	dateUpdated: Date;
-}
+// interface dd {
+// 	id: number;
+// 	itemName: string;
+// 	category: string;
+// 	quantity: number;
+// 	price: number;
+// 	supplier: string;
+// 	dateUpdated: Date;
+// }
 export async function new_item(data:FormData)
 {
-	await prisma.Inventory.create({
+	await prisma.inventory.create({
 		data:{
 			itemName: data.get("itemName") as string,
 			category: data.get("category") as string,
@@ -28,9 +28,14 @@ export async function new_item(data:FormData)
 
 export async function update_item(data:FormData)
 {
-	const updatedUser = await prisma.Inventory.update({
+	const idValue = data.get("id");
+
+	if (!idValue) {
+		throw new Error("ID is required"); // Handle the error as needed
+	}
+	await prisma.inventory.update({
 		where: {
-			id : data.get("id"),
+			id : (data.get("id") as string) || "",
 		},
 		data: {
 			itemName: data.get("itemName") as string,
@@ -43,9 +48,9 @@ export async function update_item(data:FormData)
 	revalidatePath("/");
 }
 
-export async function delete_item(id:Number)
+export async function delete_item(id:string)
 {
-	await prisma.Inventory.delete({
+	await prisma.inventory.delete({
 		where:{
 			id
 		}

@@ -3,12 +3,22 @@ import { useEffect } from "react";
 import { IoMdClose } from "react-icons/io";
 import "./form.scss"
 import {new_item, update_item} from "../../actions/actions"
-import Swal from "sweetalert2";
+import Swal, { SweetAlertResult } from "sweetalert2";
 
+interface dt
+{
+    id : string,
+    itemName: string;
+    category: string;
+    quantity: number;
+    price: number;
+    supplier: string;
+    dateUpdated: Date;
+}
 interface FormProps {
     setFromState: (state: boolean) => void;
     formData: {
-        id: number;
+        id: string;
         itemName: string;
         category: string;
         quantity: number;
@@ -16,7 +26,7 @@ interface FormProps {
         supplier: string;
         dateUpdated: Date;
     };
-    setFormData: (data: any) => void;
+    setFormData: React.Dispatch<React.SetStateAction<dt>>;
     current_fun: number;
     sectionRef: React.RefObject<HTMLFormElement>;
 }
@@ -45,7 +55,7 @@ const Form: React.FC<FormProps> = ({ setFromState, formData, setFormData, curren
         dt.append('price', (formData.price).toString());
         dt.append('quantity', (formData.quantity).toString());
         dt.append('supplier', formData.supplier);
-        if (current_fun == 1)
+        if (current_fun === 1)
         {
             new_item(dt);
             Swal.fire({
@@ -66,7 +76,7 @@ const Form: React.FC<FormProps> = ({ setFromState, formData, setFormData, curren
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, update it!"
-                }).then((result:Swal.FireResult) => {
+                }).then((result:SweetAlertResult) => {
                 if (result.isConfirmed) {
                     update_item(dt);
                     Swal.fire({

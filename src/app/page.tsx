@@ -3,7 +3,7 @@ import prisma from "../lib/db";
 import "../app/style/style.scss";
 
 export default async function Home() {
-  const inventoryData = await prisma.Inventory.findMany({
+  const inventoryData = await prisma.inventory.findMany({
     // take:10,
     // skip:10
   });
