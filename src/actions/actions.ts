@@ -1,17 +1,8 @@
 "use server"
 
-import prisma from "@/lib/db"
+import prisma from "../lib/db"
 import { revalidatePath } from "../../node_modules/next/cache";
 
-// interface dd {
-// 	id: number;
-// 	itemName: string;
-// 	category: string;
-// 	quantity: number;
-// 	price: number;
-// 	supplier: string;
-// 	dateUpdated: Date;
-// }
 export async function new_item(data:FormData)
 {
 	await prisma.inventory.create({
