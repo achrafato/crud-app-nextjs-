@@ -1,4 +1,4 @@
-import Table from "@/components/table/Table";
+import Table from "../components/table/Table";
 import prisma from "@/lib/db";
 import "./style/style.scss";
 
