@@ -1,6 +1,6 @@
 import Table from "@/components/table/Table";
 import prisma from "@/lib/db";
-import "@/app/style/style.scss";
+import "./style/style.scss";
 
 export default async function Home() {
   const inventoryData = await prisma.inventory.findMany({
