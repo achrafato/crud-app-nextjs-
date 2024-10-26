@@ -1,9 +1,9 @@
 "use client";
 import { useEffect } from "react";
 import { IoMdClose } from "react-icons/io";
-import "./form.scss"
-import {new_item, update_item} from "../../actions/actions"
+import {new_item, update_item} from "@/actions/actions"
 import Swal, { SweetAlertResult } from "sweetalert2";
+import "./form.scss"
 
 interface dt
 {
